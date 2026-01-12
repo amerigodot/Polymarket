@@ -1,18 +1,22 @@
 # Prediction Market Arbitrage Bot 📈
-
-A modular Python-based tool designed to find price discrepancies between different prediction markets like **Polymarket** and **Manifold Markets**.
+A modular Python-based tool designed to find **Risk-Free Binary Arbitrage** opportunities between prediction markets like **Polymarket** and **Manifold Markets**.
 
 ## 🌟 Overview
-This project helps you identify "arbitrage" opportunities—situations where the same event is priced differently on different platforms. By buying an outcome where it is cheap and selling (or betting against) it where it is expensive, one can theoretically lock in a profit.
+This project detects arbitrage opportunities where the combined cost of purchasing opposite outcomes across different exchanges is less than $1.00. 
 
-**Note:** This tool is currently for **educational and simulation purposes**. No real trades are executed.
+For example:
+- **Polymarket:** "Will it rain?" -> YES costs $0.60
+- **Manifold:** "Will it rain?" -> NO costs $0.35
+- **Total Cost:** $0.95
+- **Guaranteed Payout:** $1.00
+- **Risk-Free Profit:** $0.05 (5.2% ROI)
 
 ## ✨ Features
-- **Multi-Exchange Support:** Integrated with Polymarket and Manifold Markets.
-- **Smart Matching:** Uses fuzzy string matching to find identical events across platforms even if they are worded differently.
-- **Modular Design:** Easily add new exchanges or strategy logic without breaking existing code.
-- **Real-time Monitoring:** Fetches current market probabilities and prices.
-- **Detailed Logging:** Clear terminal output showing matches and calculated spreads.
+- **True Binary Arbitrage:** Calculates `Cost(YES_ExchangeA) + Cost(NO_ExchangeB)` to find guaranteed profit.
+- **Liquidity Filtering:** Automatically ignores "dead" markets with low liquidity (< $100) to ensure tradeability.
+- **Smart Matching:** Uses fuzzy string matching to link market events across platforms (e.g., matching "Will Trump win?" with "Trump 2024 Election").
+- **Actionable Reporting:** Outputs specific trade instructions with direct deep-links to the markets.
+- **Profit Calculation:** Displays the exact ROI spread for every opportunity found.
 
 ## 🚀 Getting Started
 
@@ -33,33 +37,36 @@ This project helps you identify "arbitrage" opportunities—situations where the
    ```
 
 ## 🛠 Usage
-To start the bot and begin scanning for arbitrage opportunities, simply run:
+To start the bot and begin scanning:
 
 ```bash
 python3 main.py
 ```
 
-### What happens when you run it?
-1. The bot connects to **Polymarket** and **Manifold Markets**.
-2. It fetches the latest active markets.
-3. It compares the market titles. If it finds two that look the same (e.g., "Will it rain in NYC?" vs "NYC Rain Probability"), it checks their prices.
-4. If the price difference is greater than 5%, it flags it as an **Arbitrage Opportunity** in your terminal.
+### Sample Output
+When an opportunity is found, the bot provides a clear action plan:
+
+```text
+----------------------------------------------------------------
+MATCH: Will Bitcoin hit $100k in 2024?
+  PROFIT: 5.26% | Spread: 0.05
+  ACTION:
+    1. Polymarket: Buy Yes @ 0.60 (https://polymarket.com/event/btc-100k)
+    2. Manifold: Buy No @ 0.35 (https://manifold.markets/...)
+----------------------------------------------------------------
+```
 
 ## 📂 Project Structure
-- `fetching/`: Handles all the "talking" to the different market APIs.
-- `arbitrage/`: Contains the "brain" that compares prices and finds deals.
-- `main.py`: The control center that starts everything.
+- `fetching/`: API integrations (Polymarket, Manifold) that normalize data into a standard format.
+- `arbitrage/`: Core logic for fuzzy matching, liquidity filtering, and profit calculation.
+- `main.py`: The orchestrator that runs the scan loop.
 
 ## 🤝 Contributing
-Contributions are welcome! If you'd like to add a new exchange or improve the matching algorithm:
-1. Fork the project.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
+Contributions are welcome! Please ensure any new exchange integrations inherit from `BaseDataProvider` and populate `liquidity` fields.
 
 ## 📜 License
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ## ⚠️ Disclaimer
-Trading involves risk. This software is provided "as is" without any guarantees. Always do your own research before committing funds to any platform.
+Trading involves risk. While the math may show a profit, execution risks (slippage, API downtime, withdrawal fees) exist. This software is for educational purposes only.
+

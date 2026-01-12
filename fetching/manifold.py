@@ -37,7 +37,10 @@ class ManifoldProvider(BaseDataProvider):
                         slug=item.get('slug', ''),
                         outcomes=outcomes,
                         platform="Manifold",
-                        prices=prices
+                        prices=prices,
+                        volume=float(item.get('volume', 0) or 0),
+                        liquidity=float(item.get('totalLiquidity', 0) or 0),
+                        url=item.get('url', '')
                     )
                     markets.append(m)
             return markets

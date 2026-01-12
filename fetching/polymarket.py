@@ -53,7 +53,10 @@ class PolymarketProvider(BaseDataProvider):
                     slug=item.get('slug', ''),
                     outcomes=outcomes,
                     platform="Polymarket",
-                    prices=prices
+                    prices=prices,
+                    volume=float(item.get('volume', 0) or 0),
+                    liquidity=float(item.get('liquidity', 0) or 0),
+                    url=f"https://polymarket.com/event/{item.get('slug', '')}"
                 )
                 markets.append(m)
             return markets

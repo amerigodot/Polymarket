@@ -10,3 +10,6 @@ class StandardizedMarket:
     outcomes: List[str]
     platform: str
     prices: Dict[str, float] # outcome -> price
+    volume: float = 0.0
+    liquidity: float = 0.0
+    url: str = ""

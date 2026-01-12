@@ -28,7 +28,7 @@ def main():
     all_markets = []
     for provider in providers:
         try:
-            markets = provider.get_markets(limit=20)
+            markets = provider.get_markets(limit=500)
             logger.info(f"Fetched {len(markets)} markets from {provider.__class__.__name__}")
             all_markets.extend(markets)
         except Exception as e:
@@ -44,8 +44,13 @@ def main():
     else:
         logger.info(f"Found {len(opportunities)} opportunities:")
         for opp in opportunities:
-            logger.info(f"MATCH: {opp.market_1.question} vs {opp.market_2.question}")
-            logger.info(f"  Spread: {opp.spread:.2f} | {opp.market_1.platform}: {opp.price_1:.2f} vs {opp.market_2.platform}: {opp.price_2:.2f}")
+            logger.info("----------------------------------------------------------------")
+            logger.info(f"MATCH: {opp.market_1.question}")
+            logger.info(f"  PROFIT: {opp.profit_pct:.2f}% | Spread: {opp.spread:.2f}")
+            logger.info(f"  ACTION:")
+            logger.info(f"    1. {opp.market_1.platform}: Buy {opp.buy_on_1} @ {opp.price_1:.2f} ({opp.market_1.url})")
+            logger.info(f"    2. {opp.market_2.platform}: Buy {opp.buy_on_2} @ {opp.price_2:.2f} ({opp.market_2.url})")
+            logger.info("----------------------------------------------------------------")
 
 if __name__ == "__main__":
     main()
